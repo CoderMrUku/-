@@ -58,9 +58,7 @@ public class DynamicList {
 	 * @return 原来的元素ֵ
 	 */
 	public int set(int index, int element) { 
-		if (index < 0 || index >= size) {
-			throw new IndexOutOfBoundsException("size:"+size+", index:"+index);
-		}
+		rangeCheck(index);
 		int old = elements[index];
 		elements[index] = element;
 		return old;
@@ -94,7 +92,7 @@ public class DynamicList {
 	 * @param element
 	 */
 	public void add(int element) {
-
+		insert(size, element);
 	}
 
 
@@ -104,7 +102,18 @@ public class DynamicList {
 	 * @param element
 	 */
 	public void insert(int index, int element) {
-
+		
+		// 检查range
+		rangeCheckForAdd(index);
+		
+		ensureCapacity(size+1);
+		
+		// 从插入位置起，元素依次往后挪一位
+		for (int i = size; i > index; i--) {
+			elements[i] = elements[i-1];
+		}
+		elements[index] = element;
+		size++;
 	}
 
 	/**
@@ -113,7 +122,15 @@ public class DynamicList {
 	 * @return
 	 */
 	public int removeAt(int index) {
-		return 0;
+		rangeCheck(index);
+		
+		int oldElement = elements[index];
+		// 从删除元素位置起，元素依次往后前一位
+		for (int i = index; i < size-1; i++) {
+			elements[i] = elements[i+1];
+		}
+		size--;
+		return oldElement;
 	}
 	
 	/**
@@ -121,6 +138,52 @@ public class DynamicList {
 	 */
 	public void clear() {
 		size = 0;
+	}
+	
+	private void rangeCheckForAdd(int index) {
+
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("size:"+size+", index:"+index);
+		}
+	}
+	private void rangeCheck(int index) {
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException("size:"+size+", index:"+index);
+		}
+	}
+	
+	private void ensureCapacity(int capacity) {
+		
+		int oldCapacity = elements.length;
+		if (oldCapacity >= capacity) return;
+		
+		// 扩容
+		// 数组新容量为之前的1.5倍
+		int newCapacity = oldCapacity + (oldCapacity>>1);
+		int[] newElements = new int[newCapacity];
+		
+		// 内容挪动
+		for (int i = 0; i < size; i++) {
+			newElements[i] = elements[i];
+		}
+		
+		elements = newElements;
+		System.out.println(oldCapacity + "扩容为" + newCapacity);
+		
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("size=").append(size).append(", [");
+		for (int i = 0; i < size; i++) {
+			if (i != 0) {
+				stringBuilder.append(", ");
+			}
+			stringBuilder.append(elements[i]);
+		}
+		stringBuilder.append("]");
+		return stringBuilder.toString();
 	}
 
 }

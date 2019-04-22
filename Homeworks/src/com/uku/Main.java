@@ -59,7 +59,20 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		fibnacciTest();
+//		fibnacciTest();
+		DynamicList list = new DynamicList();
+		list.add(11);
+		list.add(22);	
+		list.add(33);
+		list.insert(3, 44);
+		System.out.println(list);
+		list.removeAt(1);
+		System.out.println(list);
+		list.clear();
+		System.out.println(list);
+		list.removeAt(0);
+		System.out.println(list);
+		
 //		DynamicList list = new DynamicList(5);
 //		System.out.println("size:"+list.size());
 //		System.out.println("isEmpty:"+list.isEmpty());
