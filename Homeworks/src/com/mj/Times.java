@@ -1,4 +1,4 @@
-package com.uku;
+package com.mj;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

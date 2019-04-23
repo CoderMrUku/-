@@ -1,53 +1,30 @@
 package com.uku;
 
-public class DynamicList {
-	
-	/**
-	 * 长度
-	 */
-	private int size;
+@SuppressWarnings("unchecked")
+public class ListArray<E> extends AbstractList<E> {
 	
 	/**
 	 * 所有的元素
 	 */
-	private int[] elements;
+	private E[] elements;
 	
 	private static final int DEFAULT_CAPACITY = 5;
-	private static final int ELEMENT_NOT_FOUND = -1;
 	
-	public DynamicList(int capacity) {
+	public ListArray(int capacity) {
 		capacity = capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY;
-		elements = new int[capacity];
+		elements = (E[]) new Object[capacity];
 	}
 	
-	public DynamicList() {
+	public ListArray() {
 		this(DEFAULT_CAPACITY);
-	}
-
-	/**
-	 * 元素的数量
-	 * @return
-	 */
-	public int size() {
-		return size;
-	}
-
-	/**
-	 * 是否为空
-	 * @return
-	 */
-	public boolean isEmpty() {
-		return size == 0;
 	}
 	/**
 	 * 获取index位置的元素
 	 * @param index
 	 * @return
 	 */
-	public int get(int index) {
-		if (index < 0 || index >= size) {
-			throw new IndexOutOfBoundsException("size:"+size+", index:"+index);
-		}
+	public E get(int index) {
+		rangeCheck(index);
 		return elements[index];
 	}
 
@@ -57,9 +34,9 @@ public class DynamicList {
 	 * @param element
 	 * @return 原来的元素ֵ
 	 */
-	public int set(int index, int element) { 
+	public E set(int index, E element) { 
 		rangeCheck(index);
-		int old = elements[index];
+		E old = elements[index];
 		elements[index] = element;
 		return old;
 	}
@@ -69,30 +46,18 @@ public class DynamicList {
 	 * @param element
 	 * @return
 	 */
-	public int indexOf(int element) {
-		for (int i = 0; i < size; i++) {
-			if (elements[i] == element) {
-				return i;
+	public int indexOf(E element) {
+		if (null == element) {
+			for (int i = 0; i < size; i++) {
+				if (null == elements[i]) return i;
+			}
+		}
+		else {
+			for (int i = 0; i < size; i++) {
+				if (element.equals(elements[i])) return i;
 			}
 		}
 		return ELEMENT_NOT_FOUND;
-	}
-
-	/**
-	 * 是否包含某个元素
-	 * @param element
-	 * @return
-	 */
-	public boolean contains(int element) {
-		return indexOf(element) != ELEMENT_NOT_FOUND;
-	}
-
-	/**
-	 * 添加元素到尾部
-	 * @param element
-	 */
-	public void add(int element) {
-		insert(size, element);
 	}
 
 
@@ -101,7 +66,7 @@ public class DynamicList {
 	 * @param index
 	 * @param element
 	 */
-	public void insert(int index, int element) {
+	public void insert(int index, E element) {
 		
 		// 检查range
 		rangeCheckForAdd(index);
@@ -119,13 +84,13 @@ public class DynamicList {
 	/**
 	 * 删除index位置的元素
 	 * @param index
-	 * @return
+	 * @return 被删除的元素
 	 */
-	public int removeAt(int index) {
+	public E removeAt(int index) {
 		rangeCheck(index);
 		
-		int oldElement = elements[index];
-		// 从删除元素位置起，元素依次往后前一位
+		E oldElement = elements[index];
+		// 从删除元素位置起，元素依次往前挪一位
 		for (int i = index; i < size-1; i++) {
 			elements[i] = elements[i+1];
 		}
@@ -138,19 +103,11 @@ public class DynamicList {
 	 */
 	public void clear() {
 		size = 0;
+		for (int i = 0; i < size; i++) {
+			elements[i] = null;
+		}
 	}
 	
-	private void rangeCheckForAdd(int index) {
-
-		if (index < 0 || index > size) {
-			throw new IndexOutOfBoundsException("size:"+size+", index:"+index);
-		}
-	}
-	private void rangeCheck(int index) {
-		if (index < 0 || index >= size) {
-			throw new IndexOutOfBoundsException("size:"+size+", index:"+index);
-		}
-	}
 	
 	private void ensureCapacity(int capacity) {
 		
@@ -160,9 +117,9 @@ public class DynamicList {
 		// 扩容
 		// 数组新容量为之前的1.5倍
 		int newCapacity = oldCapacity + (oldCapacity>>1);
-		int[] newElements = new int[newCapacity];
+		E[] newElements = (E[]) new Object[newCapacity];
 		
-		// 内容挪动
+		// 元素迁移
 		for (int i = 0; i < size; i++) {
 			newElements[i] = elements[i];
 		}

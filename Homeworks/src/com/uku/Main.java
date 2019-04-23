@@ -1,8 +1,10 @@
 package com.uku;
 
-import com.uku.Times.Task;
+import com.mj.Asserts;
+import com.mj.Times;
+import com.mj.Times.Task;
 
-import com.uku.DynamicList;
+import com.uku.ListArray;
 
 //import com.uku.Test;
 
@@ -59,8 +61,41 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-//		fibnacciTest();
-		DynamicList list = new DynamicList();
+		
+//		integerListTest();
+//		personListTest();
+//		linkedListTest();
+		
+		doubleLinkedListTest();
+	}
+	
+	static void doubleLinkedListTest() {
+		List<Integer> list = new DoubleLinkedList<>();
+		list.add(11);
+		list.add(22);
+		list.add(33);
+		list.insert(0, null);
+		System.out.println(list);
+		Asserts.test(list.indexOf(22) == 2);
+		Asserts.test(list.indexOf(null) == 0);
+	}
+	
+	static void linkedListTest() {
+		List<Integer> list = new LinkedList<>();
+		list.add(11);
+		list.add(22);
+		list.add(33);
+		list.insert(0, null);
+		System.out.println(list);
+		Asserts.test(list.indexOf(22) == 2);
+		Asserts.test(list.indexOf(null) == 0);
+	}
+	
+	/**
+	 * Integer数组
+	 */
+	static void integerListTest() {
+		List<Integer> list = new ListArray<>();
 		list.add(11);
 		list.add(22);	
 		list.add(33);
@@ -70,13 +105,21 @@ public class Main {
 		System.out.println(list);
 		list.clear();
 		System.out.println(list);
-		list.removeAt(0);
-		System.out.println(list);
+	}
+	
+	/**
+	 * Person数组
+	 */
+	static void personListTest() {
+		List<Person> personList = new ListArray<>();
+		personList.add(new Person(10, "Jack"));
+		personList.add(new Person(20, "Rose"));
+		personList.add(new Person(30, "Morgan"));
+		personList.insert(2, null);
+		System.out.println(personList);
+		Asserts.test(personList.indexOf(new Person(20, "Rose")) == 1);
+		Asserts.test(personList.indexOf(new Person(30, "Morgan")) == 3);
 		
-//		DynamicList list = new DynamicList(5);
-//		System.out.println("size:"+list.size());
-//		System.out.println("isEmpty:"+list.isEmpty());
-//		System.out.println("firstObject:"+list.get(0));
 	}
 	
 }
